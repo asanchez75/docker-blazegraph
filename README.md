@@ -5,15 +5,15 @@ Run Blazegraph in Docker.
 ## Quickstart
 
 ```bash
-docker run --name blazegraph -d -p 8889:8080 lyrasis/blazegraph:2.1.4
+docker run --name blazegraph -d -p 8889:8080 lyrasis/blazegraph:2.1.5
 docker logs -f blazegraph
 ```
 
 ## Local builds
 
-```
-docker build -t blazegraph:2.1.4 2.1.4/
-docker run --name blazegraph -d -p 8889:8080 blazegraph:2.1.4
+```bash
+docker build -t blazegraph:2.1.5 2.1.5/
+docker run --name blazegraph -d -p 8889:8080 blazegraph:2.1.5
 docker logs -f blazegraph
 ```
 
@@ -26,12 +26,18 @@ Files or directories need to be made available to the container:
 mkdir -p /tmp/blazegraph/data/
 cp data/authoritieschildrensSubjects.nt /tmp/blazegraph/data/
 
+# set uid / gid for container, example is ubuntu primary user compatible
+BLAZEGRAPH_UID=$UID
+BLAZEGRAPH_GID=$GROUPS
+
 # start container making files available under /data
 docker run --name blazegraph -d \
+  -e BLAZEGRAPH_UID=$BLAZEGRAPH_UID \
+  -e BLAZEGRAPH_GID=$BLAZEGRAPH_GID \
   -p 8889:8080 \
   -v $PWD/data/RWStore.properties:/RWStore.properties \
   -v /tmp/blazegraph/data/:/data \
-  lyrasis/blazegraph:2.1.4
+  lyrasis/blazegraph:2.1.5
 
 # create payload config
 cp data/dataloader.txt.example dataloader.txt
